@@ -1,0 +1,37 @@
+{
+  "name": "react_setup",
+  "version": "1.0.0",
+  "main": "index.tsx",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack serve --port 3000 --mode development --open --hot  --env mainColor='#8520d0' --env secondaryColor='#876cd0' --env name='Elipse Chat' --env description='Asistente Virtual' --env avatar='../../assets/user.svg' --env socketUrl='https://ws-ailalia.ngrok.io' --env restUrl='https://rest-ailalia.ngrok.io/v1/api/webchat/sendMessageToAgent'",
+    "build": "webpack --mode production --env mainColor='#8520d0' --env secondaryColor='#876cd0' --env name='Elipse Chat' --env description='Asistente Virtual' --env avatar='assets/user.svg' --env socketUrl='https://ws-ailalia.ngrok.io' --env restUrl='https://rest-ailalia.ngrok.io/v1/api/webchat/sendMessageToAgent' && cd dist && serve"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.9",
+    "@types/react": "^17.0.36",
+    "@types/react-dom": "^17.0.11",
+    "css-loader": "^6.5.1",
+    "dotenv": "^10.0.0",
+    "dotenv-webpack": "^7.0.3",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.4.5",
+    "sass": "^1.43.4",
+    "sass-loader": "^12.3.0",
+    "socket.io-client": "^4.4.0",
+    "source-map-loader": "^3.0.0",
+    "spinners-react": "^1.0.6",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.2",
+    "webpack": "^5.64.2",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.5.0"
+  }
+}
