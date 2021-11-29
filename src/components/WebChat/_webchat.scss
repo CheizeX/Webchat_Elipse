@@ -9,7 +9,7 @@
   border: 2px solid $gray-9;
   box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.185);
   &:hover {
-    box-shadow: 0px 0px 5px 2px rgba($main, 0.5);
+    box-shadow: 0px 0px 5px 1px $main;
     cursor: pointer;
   }
   .trigger-avatar {
@@ -17,12 +17,12 @@
     border-radius: 50%;
     width: 100%;
     height: 100%;
-    background-color: $main;
+    background-color: $gray-10;
   }
 }
 
 .chat-container {
-  z-index: 9999;
+  z-index: 1059;
   position: absolute;
   bottom: 20px;
   right: 20px;
@@ -73,10 +73,11 @@
   justify-content: flex-start;
   padding-left: 20px;
   .avatar {
+    background-color: $gray-10;
     border-radius: 50%;
     width: 50px;
     height: 50px;
-    box-shadow: 0px 3px 5px 2px rgba(0, 0, 0, 0.185);
+    box-shadow: 0px 3px 5px 2px rgba(0, 0, 0, 0.382);
     border: 2px solid $gray-9;
   }
   .titles-container {
@@ -86,7 +87,7 @@
     color: $gray-9;
     max-height: 50px;
     overflow: hidden;
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
     .assistant-name {
       font-size: 20px;
     }
@@ -104,7 +105,7 @@
   border-top-right-radius: 10px;
   box-shadow: 0 -5px 1px -1px rgba(0, 0, 0, 0.226);
   font-size: 0.75rem;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: $gray-2;
   .dialogues-box {
     padding: 5px;
@@ -123,11 +124,11 @@
         .bot-image {
           width: 25px;
           height: 25px;
-          border-radius: 50%;
-          background-color: $gray-6;
+          border-radius: 27px;
+          background-color: $gray-10;
           margin-right: 5px;
-          box-shadow: 0 3px 5px 0px rgba(0, 0, 0, 0.267);
-          outline: 1px solid $gray-9;
+          box-shadow: 0 1px 2px 1px $main;
+          border: 1px solid $gray-9;
         }
       }
       .bot-text-container {
@@ -141,13 +142,23 @@
           width: fit-content;
           min-height: 30px;
           text-align: left;
-          padding: 7px;
+          padding: 10px;
           border-radius: 5px;
           border-top-left-radius: 0px;
           background-color: $main;
         }
       }
     }
+    .bot-time {
+      color: $gray-4;
+      font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      margin-left: 34px;
+      margin-bottom: 10px;
+      font-size: 10px;
+      padding: 3px 5px;
+      width: fit-content;
+    }
+
     .user-dialogue {
       display: flex;
       align-items: right;
@@ -160,24 +171,104 @@
         color: $gray-3;
         border-radius: 10px;
         border-top-right-radius: 0px;
-        margin-right: 10px;
-        padding: 7px;
+        margin-right: 5px;
+        padding: 10px;
       }
     }
-    .bot-time {
-      color: $gray-5;
-      font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
-      margin-left: 40px;
-      margin-bottom: 10px;
-      font-size: 10px;
-    }
     .user-time {
-      color: $gray-5;
-      font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: $gray-4;
+      font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       margin-bottom: 10px;
       font-size: 10px;
       text-align: right;
-      margin-right: 20px;
+      margin-right: 15px;
+    }
+  }
+}
+.chat-box-without-name-and-email {
+  height: 360px;
+  width: 99%;
+  border-radius: 15px;
+  box-shadow: 0 -1px 1px 0px rgba(0, 0, 0, 0.226);
+  font-size: 0.75rem;
+  font-family: 'Roboto', sans-serif;
+  color: $gray-2;
+  text-align: center;
+  border: 8px double $gray-10;
+  outline: none;
+  .without-header {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    background-color: $gray-10;
+    height: 30%;
+    width: 100%;
+    margin: 0 auto;
+    color: $gray-4;
+    .without-welcome {
+      font-weight: 700;
+      font-size: 26px;
+      padding: 20px 0 10px 0;
+    }
+    .without-information {
+      font-size: 14px;
+      padding: 0 20px;
+    }
+  }
+  .without-body {
+    height: 70%;
+    width: 100%;
+    background-color: $gray-10;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    .inp-control {
+      width: 90%;
+      height: 40px;
+      border: 1px solid $gray-9;
+      border-radius: 5px;
+      padding-left: 10px;
+      color: $gray-3;
+      &::placeholder {
+        color: $gray-6;
+        padding-left: 5px;
+      }
+      &:focus {
+        outline: 2px solid rgba($main, 0.7);
+      }
+    }
+    .inp-control-error {
+      outline: 2px solid $orange-1;
+    }
+    .error-message {
+      color: $orange-1;
+      width: 90%;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+    }
+    .but-control {
+      width: 90%;
+      font-family: 'Roboto', sans-serif;
+      height: 40px;
+      border: 1px solid $gray-9;
+      background-color: $main;
+      color: $gray-9;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 0px;
+      &:hover {
+        background-color: $main-hover;
+      }
+      &:active {
+        background-color: $main;
+      }
     }
   }
 }
@@ -204,7 +295,7 @@
     border: 2px solid $gray-9;
     padding-left: 15px;
     font-size: 12px;
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
     &::placeholder {
       padding-left: 3px;
     }
@@ -250,7 +341,7 @@
   justify-content: center;
   height: 40px;
   .footer-button {
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: $gray-9;
     font-size: 12px;
     text-align: center;

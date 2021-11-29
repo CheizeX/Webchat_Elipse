@@ -1,11 +1,7 @@
 import React from 'react';
-import "../../src/styles.scss";
+import '../styles.scss';
 import { WebChat } from './WebChat/Webchat';
 
-const app = () => {
-    return (
-        <WebChat />
-    )
-}
+const app = () => <WebChat />;
 
-export default app
+export default app;
