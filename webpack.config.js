@@ -1,41 +1,40 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const Webpack = require("webpack");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const Webpack = require('webpack');
 
-const path = require("path");
+const path = require('path');
 
 module.exports = (data) => {
-  console.log({ data });
   return {
-    entry: "./src/index.tsx",
+    entry: './src/index.tsx',
     output: {
-      path: path.resolve(__dirname, "dist"),
-      filename: "bundle.js",
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'bundle.js',
     },
     resolve: {
-      extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
-      modules: ["src", "node_modules"],
+      extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+      modules: ['src', 'node_modules'],
     },
     module: {
       rules: [
         {
           test: /\.(ts|tsx)$/,
           exclude: /node_modules/,
-          use: ["ts-loader"],
+          use: ['ts-loader'],
         },
         {
-          enforce: "pre",
+          enforce: 'pre',
           test: /\.js$/,
-          loader: "source-map-loader",
+          loader: 'source-map-loader',
           exclude: /node_modules/,
         },
         {
           test: /.(sa|sc|c)ss$/,
           use: [
             MiniCssExtractPlugin.loader,
-            "css-loader",
+            'css-loader',
             {
-              loader: "sass-loader",
+              loader: 'sass-loader',
               options: {
                 additionalData: `$mainColor: ${data.mainColor}; $secondaryColor: ${data.secondaryColor};`,
               },
@@ -45,17 +44,17 @@ module.exports = (data) => {
         },
         {
           test: /\.(png|svg|jpe?g|gif)$/,
-          use: ["file-loader?name=assets/[name].[ext]"],
+          use: ['file-loader?name=assets/[name].[ext]'],
           exclude: /node_modules/,
         },
       ],
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, "public", "index.html"),
+        template: path.resolve(__dirname, 'public', 'index.html'),
       }),
       new MiniCssExtractPlugin({
-        filename: "styles.css",
+        filename: 'styles.css',
       }),
       new Webpack.DefinePlugin({
         processEnv: {
