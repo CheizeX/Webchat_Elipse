@@ -208,11 +208,11 @@ export const WebChat: FC = function () {
   }, [setSocket]);
 
   useEffect(() => {
-    // socket?.on('connect', () => {
-    //   console.log('connected');
-    // });
-    socket?.on('newMessageToWebchatUser', () => {
-      setMessages(messages);
+    socket?.on('connect', () => {
+      console.log('connected');
+    });
+    socket?.on('newMessageToWebchatUser', (arg: Message[]) => {
+      setMessages(arg);
     });
     socket?.on('finishConversationForWebchat', () => {
       localStorage.removeItem('chatId');
@@ -245,7 +245,7 @@ export const WebChat: FC = function () {
             <>
               <div className="chat-box">
                 <div className="dialogues-box">
-                  <div key="0">
+                  <div>
                     <div className="bot-dialogue">
                       <div className="bot-image-container">
                         <img className="bot-image" src={RobotAvatar} alt="" />
@@ -271,7 +271,7 @@ export const WebChat: FC = function () {
                   {messages &&
                     messages?.map((message) =>
                       message.from === 'AGENT' ? (
-                        <div>
+                        <div key={message._id}>
                           <div className="bot-dialogue">
                             <div className="bot-image-container">
                               <img
