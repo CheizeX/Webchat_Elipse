@@ -157,12 +157,16 @@ export const WebChat: FC = function () {
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (e.key === 'Enter') {
-      handleSendMessage();
+      if (chatInputDialogue.trim() !== '') {
+        handleSendMessage();
+      }
     }
   };
 
   const handleClcikToSendMessage = () => {
-    handleSendMessage();
+    if (chatInputDialogue.trim() !== '') {
+      handleSendMessage();
+    }
   };
 
   const getMessages = useCallback(
