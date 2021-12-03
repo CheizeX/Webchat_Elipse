@@ -77,13 +77,14 @@ export const WebChat: FC = function () {
     if (socket.connected) {
       setChatInputDialogue('');
       const bodyObject: Message = {
-        content: chatInputDialogue || '',
+        content: chatInputDialogue,
         infoUser: `${name} - ${email}`,
       };
       try {
         setSendingMessage(true);
         const axiosConfig: AxiosRequestConfig = {
-          url: 'https://rest-ailalia.ngrok.io/v1/api/webchat/sendMessageToAgent',
+          // url: 'https://rest-ailalia.ngrok.io/v1/api/webchat/sendMessageToAgent',
+          url: `${processEnv.restUrl}webchat/sendMessageToAgent`,
           method: 'post',
           data: bodyObject,
           headers: {
@@ -173,7 +174,8 @@ export const WebChat: FC = function () {
     async (idChat) => {
       try {
         const axiosConfig: AxiosRequestConfig = {
-          url: `https://rest-ailalia.ngrok.io/v1/api/webchat/getConversation/${idChat}`,
+          // url: `https://rest-ailalia.ngrok.io/v1/api/webchat/getConversation/${idChat}`,
+          url: `${processEnv.restUrl}webchat/getConversation/${idChat}`,
           method: 'get',
           headers: {
             'Content-Type': 'application/json',
@@ -207,6 +209,7 @@ export const WebChat: FC = function () {
   }, [getMessages]);
 
   useEffect(() => {
+    // const socketConnection = io(processEnv.socketUrl);
     const socketConnection = io(processEnv.socketUrl);
     setSocket(socketConnection);
   }, [setSocket]);
@@ -404,7 +407,7 @@ export const WebChat: FC = function () {
 
         <div className="footer">
           <a
-            href="https://elipse.ai/elipse-chat/"
+            href="https://elipse.ai/elipse-chat/#preciosyplanes"
             target="_blank"
             className="footer-button"
             rel="noreferrer">

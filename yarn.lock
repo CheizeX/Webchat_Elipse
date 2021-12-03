@@ -3031,6 +3031,11 @@ react-dom@^17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
+react-favicon@^0.0.25:
+  version "0.0.25"
+  resolved "https://registry.yarnpkg.com/react-favicon/-/react-favicon-0.0.25.tgz#f5f26614037bf720861142e3e9f9893a54beb273"
+  integrity sha512-yv3mRVd3pV+NyS1yRE6BQVt7SNwt2mF+DcMO9jtW8v7ucSLDQ98wNmIzU2ZF6lvIml26J+ZdOYkQz40CN2Xpyg==
+
 react-is@^16.8.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
