@@ -229,7 +229,7 @@ export const WebChat: FC = function () {
   return (
     <>
       <div className={isCollapsed ? 'chat-container' : 'hidden'}>
-        <div className="header">
+        {/* <div className="header">
           <div className="header-button-conatiner">
             <button
               type="button"
@@ -238,12 +238,58 @@ export const WebChat: FC = function () {
               <img className="down-image" src={CollapseButton} alt="send" />
             </button>
           </div>
-        </div>
+        </div> */}
         <div className="assistant">
+          <div>
+            <svg
+              className="waves"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              viewBox="0 24 150 28"
+              preserveAspectRatio="none"
+              shapeRendering="auto">
+              <defs>
+                <path
+                  id="gentle-wave"
+                  d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+                />
+              </defs>
+              <g className="parallax">
+                <use
+                  xlinkHref="#gentle-wave"
+                  x="48"
+                  y="0"
+                  fill="rgba(255,255,255,0.7)"
+                />
+                <use
+                  xlinkHref="#gentle-wave"
+                  x="48"
+                  y="3"
+                  fill="rgba(255,255,255,0.5)"
+                />
+                <use
+                  xlinkHref="#gentle-wave"
+                  x="48"
+                  y="5"
+                  fill="rgba(255,255,255,0.3)"
+                />
+                <use xlinkHref="#gentle-wave" x="48" y="7" fill="#ffffff" />
+              </g>
+            </svg>
+          </div>
+
           <img className="avatar" src={RobotAvatar} alt="avatar" />
           <div className="titles-container">
             <h1 className="assistant-name">{processEnv.name}</h1>
             <p className="assistant-title">{processEnv.description}</p>
+          </div>
+          <div className="header-button-conatiner">
+            <button
+              type="button"
+              className="colapse-button"
+              onClick={handleCollapse}>
+              <img className="down-image" src={CollapseButton} alt="send" />
+            </button>
           </div>
         </div>
 

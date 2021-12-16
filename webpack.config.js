@@ -36,7 +36,7 @@ module.exports = (data) => {
             {
               loader: 'sass-loader',
               options: {
-                additionalData: `$mainColor: ${data.mainColor}; $secondaryColor: ${data.secondaryColor};`,
+                additionalData: `$mainColor: ${data.mainColor};`,
               },
             },
           ],
