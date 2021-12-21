@@ -15,6 +15,14 @@ import SendButton from '../../assets/send_121135.svg';
 import CollapseButton from '../../assets/chevron-square-down.svg';
 import RobotAvatar from '../../assets/robot.svg';
 import { Message } from '../shared';
+import { UploadFiles } from '../UploadFiles/UploadFiles';
+import ImageIcon from '../../assets/image-icon.svg';
+import PdfIcon from '../../assets/pdf-icon.svg';
+
+export interface webchatProps {
+  fromId?: string;
+  setUploadActive?: (uploadActive: boolean) => void;
+}
 
 export const WebChat: FC = function () {
   const [socket, setSocket] = useState(null);
@@ -29,6 +37,7 @@ export const WebChat: FC = function () {
   const [chatInputDialogue, setChatInputDialogue] = useState('');
   const [sendingMessage, setSendingMessage] = useState(false);
   const [messages, setMessages] = useState([] as Message[]);
+  const [uploadActive, setUploadActive] = useState(false);
 
   // <<< Event Handlers >>>
   const handleCollapse = (): void => {
@@ -83,8 +92,7 @@ export const WebChat: FC = function () {
       try {
         setSendingMessage(true);
         const axiosConfig: AxiosRequestConfig = {
-          // url: 'https://rest-ailalia.ngrok.io/v1/api/webchat/sendMessageToAgent',
-          url: `${processEnv.restUrl}webchat/sendMessageToAgent`,
+          url: `${processEnv.restUrl}/webchat/sendMessageToAgent`,
           method: 'post',
           data: bodyObject,
           headers: {
@@ -174,8 +182,7 @@ export const WebChat: FC = function () {
     async (idChat) => {
       try {
         const axiosConfig: AxiosRequestConfig = {
-          // url: `https://rest-ailalia.ngrok.io/v1/api/webchat/getConversation/${idChat}`,
-          url: `${processEnv.restUrl}webchat/getConversation/${idChat}`,
+          url: `${processEnv.restUrl}/webchat/getConversation/${idChat}`,
           method: 'get',
           headers: {
             'Content-Type': 'application/json',
@@ -185,10 +192,34 @@ export const WebChat: FC = function () {
         if (response.data.success) {
           setMessages(response.data.result);
         } else {
-          console.log('error', response.data.errorMessage);
+          Swal.fire({
+            title:
+              'Estamos experimentando inconvenientes técnicos. Por favor, disculpe las molestias ocasionadas y vuelva a intentarlo más tarde. Muchas Gracias.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: processEnv.mainColor,
+            imageUrl: RobotAvatar,
+            imageWidth: 100,
+            imageHeight: 100,
+            imageAlt: 'Custom image',
+            customClass: {
+              popup: 'animated animate__fadeInDown',
+            },
+          });
         }
       } catch (error) {
-        console.log(error);
+        Swal.fire({
+          title:
+            'Estamos experimentando inconvenientes técnicos. Por favor, disculpe las molestias ocasionadas y vuelva a intentarlo más tarde. Muchas Gracias.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: processEnv.mainColor,
+          imageUrl: RobotAvatar,
+          imageWidth: 100,
+          imageHeight: 100,
+          imageAlt: 'Custom image',
+          customClass: {
+            popup: 'animated animate__fadeInDown',
+          },
+        });
       }
     },
     [setMessages],
@@ -198,7 +229,37 @@ export const WebChat: FC = function () {
     dialogueBoxRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [dialogueBoxRef]);
 
-  // <<< useEffect instances >>>
+  const handleDownloadFile = async (file: string, chatId: string) => {
+    try {
+      const response = await axios({
+        url: `${processEnv.restUrl}/webchat/file/${chatId}/${file}`,
+        method: 'get',
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', file);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      Swal.fire({
+        title:
+          'Estamos experimentando inconvenientes técnicos para descargar el archivo.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: processEnv.mainColor,
+        imageUrl: RobotAvatar,
+        imageWidth: 100,
+        imageHeight: 100,
+        imageAlt: 'Custom image',
+        customClass: {
+          popup: 'animated animate__fadeInDown',
+        },
+      });
+    }
+  };
+
   useEffect(scrollToBottom, [scrollToBottom, messages]);
 
   useEffect(() => {
@@ -209,7 +270,6 @@ export const WebChat: FC = function () {
   }, [getMessages]);
 
   useEffect(() => {
-    // const socketConnection = io(processEnv.socketUrl);
     const socketConnection = io(processEnv.socketUrl);
     setSocket(socketConnection);
   }, [setSocket]);
@@ -229,17 +289,8 @@ export const WebChat: FC = function () {
   return (
     <>
       <div className={isCollapsed ? 'chat-container' : 'hidden'}>
-        {/* <div className="header">
-          <div className="header-button-conatiner">
-            <button
-              type="button"
-              className="colapse-button"
-              onClick={handleCollapse}>
-              <img className="down-image" src={CollapseButton} alt="send" />
-            </button>
-          </div>
-        </div> */}
         <div className="assistant">
+          {/* <<<<<<<<<<< WAVES ANIMATION START >>>>>>>>>> */}
           <div>
             <svg
               className="waves"
@@ -277,6 +328,7 @@ export const WebChat: FC = function () {
               </g>
             </svg>
           </div>
+          {/* <<<<<<<<<<< WAVES ANIMATION FINISH >>>>>>>>>> */}
 
           <img className="avatar" src={RobotAvatar} alt="avatar" />
           <div className="titles-container">
@@ -333,9 +385,51 @@ export const WebChat: FC = function () {
                                 alt=""
                               />
                             </div>
-                            <div className="bot-text-container">
-                              <p className="bot-text">{message.content}</p>
-                            </div>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleDownloadFile(
+                                  message.content.split('/')[3],
+                                  localStorage?.getItem('chatId'),
+                                )
+                              }
+                              className={
+                                message.contentType === 'ATTACHMENT'
+                                  ? 'bot-text-container clickable-bot'
+                                  : 'bot-text-container'
+                              }>
+                              <span className="bot-text">
+                                {message.contentType === 'ATTACHMENT' &&
+                                  message.content.substring(
+                                    message.content.length - 3,
+                                    message.content.length,
+                                  ) !== 'pdf' && (
+                                    <img
+                                      className="bot-image-uploaded"
+                                      src={ImageIcon}
+                                      alt="img"
+                                    />
+                                  )}
+                                {message.contentType === 'ATTACHMENT' &&
+                                  message.content.substring(
+                                    message.content.length - 3,
+                                    message.content.length,
+                                  ) === 'pdf' && (
+                                    <img
+                                      className="bot-image-uploaded"
+                                      src={PdfIcon}
+                                      alt="pdf"
+                                    />
+                                  )}
+                                {message.contentType === 'ATTACHMENT' &&
+                                  message.content.substring(
+                                    76,
+                                    message.content.length,
+                                  )}
+                                {message.contentType === 'TEXT' &&
+                                  message.content}
+                              </span>
+                            </button>
                           </div>
                           <div className="bot-time">
                             {' '}
@@ -352,9 +446,43 @@ export const WebChat: FC = function () {
                       ) : (
                         <div key={message._id}>
                           <div className="user-dialogue">
-                            <div className="user-dialogue-container">
-                              {message.content}
-                            </div>
+                            <button
+                              type="button"
+                              className={
+                                message.contentType === 'ATTACHMENT'
+                                  ? 'user-dialogue-container clickable-user'
+                                  : 'user-dialogue-container'
+                              }>
+                              {message.contentType === 'TEXT' &&
+                                message.content}
+                              {message.contentType === 'ATTACHMENT' &&
+                                message.content.substring(
+                                  76,
+                                  message.content.length,
+                                )}
+                              {message.contentType === 'ATTACHMENT' &&
+                                message.content.substring(
+                                  message.content.length - 3,
+                                  message.content.length,
+                                ) !== 'pdf' && (
+                                  <img
+                                    className="bot-image-uploaded"
+                                    src={ImageIcon}
+                                    alt="img"
+                                  />
+                                )}
+                              {message.contentType === 'ATTACHMENT' &&
+                                message.content.substring(
+                                  message.content.length - 3,
+                                  message.content.length,
+                                ) === 'pdf' && (
+                                  <img
+                                    className="bot-image-uploaded"
+                                    src={PdfIcon}
+                                    alt="pdf"
+                                  />
+                                )}
+                            </button>
                           </div>
                           <div className="user-time">
                             {new Date(message.createdAt).toLocaleTimeString(
@@ -373,6 +501,22 @@ export const WebChat: FC = function () {
                 </div>
               </div>
               <div className="input-container">
+                <button
+                  onClick={() => setUploadActive(!uploadActive)}
+                  type="button"
+                  className={
+                    uploadActive
+                      ? 'upload-button upload-active'
+                      : 'upload-button'
+                  }>
+                  <img className="file-icon" src={SendButton} alt="file" />
+                </button>
+                {uploadActive && (
+                  <UploadFiles
+                    fromId={messages[0]?.from}
+                    setUploadActive={setUploadActive}
+                  />
+                )}
                 <input
                   disabled={sendingMessage}
                   type="text"
@@ -415,8 +559,8 @@ export const WebChat: FC = function () {
             <div className="without-header">
               <div className="without-welcome">Bienvenido!</div>
               <div className="without-information">
-                Para poder iniciar la conversación completa los siguientes
-                campos
+                Para poder iniciar la conversación, es necesario completar los
+                siguientes campos:
               </div>
             </div>
             <form className="without-body">
