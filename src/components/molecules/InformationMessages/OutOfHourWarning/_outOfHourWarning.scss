@@ -1,0 +1,69 @@
+.out-of-hour__ewc-class {
+  animation: out-of-hour-animation 0.1s ease-in-out infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-play-state: running;
+
+  @keyframes out-of-hour-animation {
+    0% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  width: 100%;
+  z-index: 1;
+  height: 79%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(160deg, $main 0%, $secondary 120%);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  font-size: 1.3rem;
+  color: $gray-10;
+  font-weight: 400;
+  line-height: 1.5625rem;
+  align-self: center;
+  border-radius: 0.625rem;
+  border: 0.3125rem solid $gray-10;
+  padding: 0.625rem 2.5rem;
+  & > div {
+    width: 3.125rem;
+    height: 3.125rem;
+    box-shadow: 0rem 0.0625rem 0.3125rem 0rem rgba(0, 0, 0, 0.473);
+    border-radius: 50%;
+    background: $main;
+
+    & * {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .button-close-out-of-our__ewc-class {
+    width: 3.75rem;
+    height: 2.5rem;
+    background-color: $gray-10;
+    border: none;
+    outline: none;
+    border-radius: 0.625rem;
+    box-shadow: 0rem 0.0625rem 0.3125rem 0rem rgba(0, 0, 0, 0.473);
+    color: $main;
+    font-size: 1rem;
+    font-weight: 700;
+    &:hover {
+      background-image: linear-gradient(160deg, $main 0%, $secondary 120%);
+      color: $gray-10;
+      cursor: pointer;
+      border: 0.125rem solid $gray-10;
+    }
+  }
+}

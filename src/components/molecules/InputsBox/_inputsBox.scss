@@ -1,0 +1,146 @@
+.inputs-container__ewc-class {
+  width: 100%;
+  height: 4.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $gray-10;
+  border-top: 0.125rem solid $gray-9;
+  box-shadow: 0 0.3125rem 0.0625rem 0rem rgba(0, 0, 0, 0.226);
+  border-bottom-left-radius: 0.1875rem;
+  border-bottom-right-radius: 1.875rem;
+  padding: 0 0.625rem;
+
+  .chat-input__ewc-class {
+    color: $gray-2;
+    width: 68%;
+    height: 2.5rem;
+    outline: none;
+    font-size: 1.25rem;
+    outline: none;
+    border: 0.125rem solid $gray-9;
+    border-radius: 0.3125rem;
+    padding-left: 0.9375rem;
+    font-size: 0.75rem;
+    font-family: 'Roboto', sans-serif;
+    &::placeholder {
+      padding-left: 0.1875rem;
+    }
+
+    &:focus {
+      transition: 0.5s ease all;
+      border-color: $main;
+    }
+  }
+  .send-button__ewc-class {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(140deg, $main, $secondary);
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      transition: 0.5s ease all;
+      cursor: pointer;
+      .send-image__ewc-class {
+        transition: 0.5s ease all;
+        outline: 0.125rem solid $secondary;
+        cursor: pointer;
+      }
+    }
+    &:active {
+      transition: 0.5s ease all;
+      opacity: 1;
+    }
+    .send-image__ewc-class {
+      transition: 0.5s ease all;
+      border: 0.1875rem solid rgba($main, 0);
+      outline: 0.125rem solid rgba($secondary, 0.5);
+      border-radius: 50%;
+    }
+  }
+  .disabled-button__ewc-class {
+    &:hover {
+      background-color: $main-hover;
+      cursor: wait;
+    }
+  }
+}
+
+.upload-button__ewc-class {
+  width: 2.4rem;
+  height: 2.4rem;
+  position: relative;
+  border-radius: 0.3125rem;
+  overflow: hidden;
+  object-fit: contain;
+  background: linear-gradient(140deg, $main, $secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  &:hover {
+    // background: linear-gradient(140deg, $secondary, $main);
+    cursor: pointer;
+    .file-icon__ewc-class {
+      outline: 0.125rem solid $secondary;
+      cursor: pointer;
+    }
+  }
+  .input-file__ewc-class {
+    z-index: 0;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    background-color: $main;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $main;
+    &:hover {
+      transition: 0.5s ease all;
+      background: $main-hover;
+      cursor: pointer;
+    }
+
+    &:active {
+      transition: 0.5s ease all;
+      opacity: 1;
+    }
+    .send-image__ewc-class {
+      object-fit: cover;
+    }
+  }
+  .file-icon__ewc-class {
+    transition: 0.5s ease all;
+    transform: rotate3d(0, 0, 1, -90deg);
+    border: 0.1875rem solid rgba($main, 0);
+    outline: 0.125rem solid rgba($secondary, 0.3);
+    border-radius: 50%;
+    &:hover {
+      transition: 0.5s ease all;
+      outline: 0.125rem solid $secondary;
+      cursor: pointer;
+    }
+  }
+}
+
+.emit__ewc-class {
+  width: 12.5rem;
+  height: 12.5rem;
+  border: 0.0625rem solid red;
+}
+
+.upload-active__ewc-class {
+  .file-icon__ewc-class {
+    outline: 0.125rem solid $secondary;
+    transform: rotate3d(0, 0, 1, 90deg);
+  }
+}

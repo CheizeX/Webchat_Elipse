@@ -1,0 +1,338 @@
+.chat-box__ewc-class {
+  height: 19.125rem;
+  width: 100%;
+  background-color: $gray-10;
+  margin-top: 0.4375rem;
+  padding-top: 0.625rem;
+  font-size: 0.75rem;
+  font-family: 'Roboto', sans-serif;
+  color: $gray-2;
+  .dialogues-box__ewc-class {
+    padding: 0.5rem;
+    max-height: 100%;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    .bot-dialogue__ewc-class {
+      display: flex;
+      align-items: left;
+      width: 70%;
+      margin: 0.3125rem 0;
+      margin-left: 0.3125rem;
+      .bot-image-container__ewc-class {
+        .bot-image__ewc-class {
+          width: 1.5625rem;
+          height: 1.5625rem;
+          border-radius: 1.6875rem;
+          background-image: linear-gradient(140deg, $main 0%, $secondary 150%);
+          margin-right: 0.3125rem;
+          box-shadow: 0 0.0625rem 0.125rem 0.0625rem $main;
+          border: 0.0625rem solid $gray-9;
+        }
+      }
+      .bot-text-container__ewc-class {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $gray-9;
+        border: none;
+        .bot-text__ewc-class {
+          position: relative;
+          flex-direction: column;
+          display: flex;
+          align-items: center;
+          min-height: 1.875rem;
+          text-align: left;
+          padding: 0.625rem;
+          border-radius: 0.3125rem;
+          border-top-left-radius: 0rem;
+          background-color: $main;
+          background-image: linear-gradient(160deg, $main 0%, $secondary 130%);
+          max-width: 14.375rem;
+          & > img {
+            width: 100%;
+            border-radius: 0.3125rem;
+          }
+        }
+      }
+    }
+    .bot-time__ewc-class {
+      color: $gray-4;
+      font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      margin-left: 2.125rem;
+      margin-bottom: 0.625rem;
+      font-size: 0.625rem;
+      padding: 0.1875rem 0.3125rem;
+      width: fit-content;
+    }
+
+    .user-dialogue__ewc-class {
+      display: flex;
+      align-items: right;
+      width: 70%;
+      margin: 0.3125rem 0;
+      margin-left: 30%;
+      justify-content: flex-end;
+      .user-dialogue-container__ewc-class {
+        position: relative;
+        border: none;
+        background-color: $gray-9;
+        color: $gray-3;
+        border-radius: 0.625rem;
+        border-top-right-radius: 0rem;
+        margin-right: 0.3125rem;
+        padding: 0.625rem;
+        display: flex;
+        max-width: 14.375rem;
+        align-items: flex-start;
+        justify-content: center;
+        text-align: left;
+        padding-left: 0.9375rem;
+        & img {
+          width: 100%;
+          border-radius: 0.3rem;
+          border: 0.0625rem solid $gray-9;
+        }
+      }
+      .user-maximize-and-download-container__ewc-class {
+        align-items: flex-start;
+        position: absolute;
+        top: -0.01rem;
+        left: -0.01rem;
+        & * {
+          fill: $main;
+        }
+        & button {
+          background-color: $gray-9;
+          border-top-left-radius: 1rem;
+          border-bottom-left-radius: 1rem;
+        }
+      }
+    }
+
+    .clickable-bot__ewc-class {
+      &:hover,
+      &:focus {
+        & span {
+          cursor: pointer;
+        }
+      }
+    }
+    .user-time__ewc-class {
+      color: $gray-4;
+      font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      margin-bottom: 0.625rem;
+      font-size: 0.625rem;
+      text-align: right;
+      margin-right: 0.625rem;
+    }
+  }
+}
+
+.chat-box-without-name-and-RUT__ewc-class {
+  height: 24rem;
+  margin-top: 7px;
+  width: 100%;
+  border-bottom-left-radius: 0.9375rem;
+  border-bottom-right-radius: 0.9375rem;
+  box-shadow: 0 -0.0625rem 0.0625rem 0rem rgba(0, 0, 0, 0.226);
+  font-size: 0.75rem;
+  font-family: 'Roboto', sans-serif;
+  color: $gray-2;
+  text-align: center;
+  outline: none;
+  .without-header__ewc-class {
+    background-color: $gray-10;
+    height: 30%;
+    width: 100%;
+    margin: 0 auto;
+    color: $gray-4;
+    .without-welcome__ewc-class {
+      background-image: linear-gradient(135deg, $main 0%, $secondary 120%);
+      background-size: 100%;
+      background-clip: text;
+      -moz-background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -moz-text-fill-color: transparent;
+      font-weight: 700;
+      font-size: 1.625rem;
+      padding: 1.25rem 0 0.625rem 0;
+    }
+    .without-information__ewc-class {
+      font-size: 0.875rem;
+      padding: 0 1.25rem;
+    }
+  }
+  .without-body__ewc-class {
+    height: 70%;
+    width: 100%;
+    background-color: $gray-10;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+    .inp-control__ewc-class {
+      width: 90%;
+      height: 2.5rem;
+      border: 0.0625rem solid $gray-9;
+      border-radius: 0.3125rem;
+      padding-left: 0.625rem;
+      color: $gray-3;
+      &::placeholder {
+        color: $gray-6;
+        padding-left: 0.3125rem;
+      }
+      &:focus {
+        outline: 0.125rem solid rgba($main, 0.7);
+      }
+    }
+    .inp-control-error__ewc-class {
+      outline: 0.125rem solid $main-hover;
+    }
+    .error-message__ewc-class {
+      color: $main;
+      width: 90%;
+      height: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+    }
+    .but-control__ewc-class {
+      width: 90%;
+      font-family: 'Roboto', sans-serif;
+      height: 2.5rem;
+      border: 0.0625rem solid $gray-9;
+      color: $gray-9;
+      font-weight: 700;
+      font-size: 0.875rem;
+      border-radius: 0.3125rem;
+      cursor: pointer;
+      margin-top: 0rem;
+      background-image: linear-gradient(165deg, $main 0%, $secondary 70%);
+      background-size: 200% 100%;
+      &:hover {
+        transition: all 0.5 ease-in-out;
+        background-position: 70% 0;
+        -o-transition: all 0.5s ease-in-out;
+        -webkit-transition: all 0.5s ease-in-out;
+        background-color: $main;
+      }
+      &:active {
+        background-color: $main;
+      }
+    }
+  }
+}
+
+.maximize-and-download-container__ewc-class {
+  transition: all 0.2s ease-in-out;
+  position: absolute;
+  flex-direction: column;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: -2px;
+  border-radius: 0.125rem;
+  background-color: transparent;
+  cursor: default;
+  padding: 5px 0;
+  & > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 0.125rem;
+    border: none;
+    background-color: transparent;
+    :hover {
+      cursor: pointer;
+    }
+    & svg {
+      // background: transparent;
+      // outline: 1px solid $main;
+      color: $gray-10;
+    }
+  }
+
+  .bot-file-maximize__ewc-class {
+    width: 1.2rem;
+    height: 1.2rem;
+    border: none;
+
+    & svg {
+      background-color: rgba($main-hover, 0.9);
+    }
+  }
+  .bot-file-download__ewc-class {
+    width: 1.2rem;
+    height: 1.2rem;
+    border: none;
+    & svg {
+      background-color: rgba($main-hover, 0.9);
+    }
+  }
+}
+
+.maximized-file-modal__ewc-class {
+  transition: all 0.5s ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 99998;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2% 0;
+  .bot-image-maximized__ewc-class {
+    z-index: 99998;
+    width: 95%;
+    height: 100%;
+    border-radius: 0.325rem;
+    background-color: $gray-10;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    object-fit: contain;
+    background-color: transparent;
+  }
+  .minimize-image-button__ewc-class {
+    z-index: 99999;
+    position: absolute;
+    top: 1.5%;
+    right: 1%;
+    width: 2.8rem;
+    height: 2.8rem;
+    background-color: transparent;
+    border: none;
+    :hover {
+      border-radius: 5px;
+      padding: 5px;
+      background-color: rgba($gray-10, 0.9);
+      cursor: pointer;
+      box-shadow: 0 0 1rem rgba($gray-10, 0.8);
+    }
+    & svg {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      color: $gray-10;
+      & path {
+        fill: $gray-5;
+      }
+    }
+  }
+}

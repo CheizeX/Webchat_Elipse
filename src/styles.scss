@@ -1,4 +1,12 @@
 @import '../src/scss/variables';
-@import '../src/scss/body';
+//@import '../src/scss/body';
 @import '../src/components/WebChat/webchat';
-@import '../src/components/UploadFiles/uploadFiles';
+@import '../src/components/molecules/UploadFiles/uploadFiles';
+@import '../src/components/molecules/AnimationSvg/animation';
+@import '../src/components/molecules/Assistant/assistant';
+@import '../src/components/molecules/ChatBox/chatBox';
+@import '../src/components/molecules/InputsBox/inputsBox';
+@import '../src/components/molecules/TriggerButton/triggerButton';
+@import '../src/components/molecules/InformationMessages/OutOfHourWarning/outOfHourWarning';
+@import '../src/components/molecules/InformationMessages/FinishedConversation/finishedConversation';
+@import '../src/components/molecules/InformationMessages/BusyAgents/busyAgents';

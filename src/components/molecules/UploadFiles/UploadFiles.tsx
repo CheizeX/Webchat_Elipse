@@ -4,13 +4,12 @@ import React, { FC, useCallback, useState } from 'react';
 import { FileError, useDropzone } from 'react-dropzone';
 import Swal from 'sweetalert2';
 import { SpinnerDotted } from 'spinners-react';
-import RobotAvatar from '../../assets/robot.svg';
-import SendButton from '../../assets/send_121135.svg';
-import FileUpload from '../../assets/drop-here.svg';
-import ImageIcon from '../../assets/image-icon.svg';
-import PdfIcon from '../../assets/pdf-icon.svg';
-import UploadClick from '../../assets/upload-image.svg';
-import { webchatProps } from '../WebChat/Webchat';
+import SendButton from '../../../assets/send_121135.svg';
+import FileUpload from '../../../assets/drop-here.svg';
+import ImageIcon from '../../../assets/image-icon.svg';
+import PdfIcon from '../../../assets/pdf-icon.svg';
+import UploadClick from '../../../assets/upload-image.svg';
+import { webchatProps } from '../../WebChat/Webchat';
 
 export interface UploadableFile {
   name?: string | undefined;
@@ -38,7 +37,6 @@ export const UploadFiles: FC<webchatProps> = function ({
       errors: [],
       id: index + Date.now(),
     }));
-
     setFiles((curr) => [...curr, ...mappedAcc]);
   }, []);
 
@@ -57,11 +55,11 @@ export const UploadFiles: FC<webchatProps> = function ({
 
   const handleAdjuntarClick = async () => {
     try {
-      if (localStorage?.getItem('chatId')) {
-        const chatId = localStorage?.getItem('chatId');
+      if (sessionStorage?.getItem('chatId')) {
+        const chatId = sessionStorage?.getItem('chatId');
         setUploading(true);
         const axiosConfig: AxiosRequestConfig = {
-          url: `${processEnv.restUrl}/webchat/sendFiles/${chatId}?from=${fromId}`,
+          url: `${processEnv.restUrl}/webchat/sendFiles/${chatId}?from=${fromId}&companyId=${processEnv.companyId}`,
           method: 'post',
           data: formData,
           headers: {
@@ -69,7 +67,6 @@ export const UploadFiles: FC<webchatProps> = function ({
           },
         };
         await axios(axiosConfig);
-
         setUploading(false);
         setUploadActive(false);
       }
@@ -79,10 +76,6 @@ export const UploadFiles: FC<webchatProps> = function ({
           'Estamos experimentando inconvenientes técnicos. Por favor, disculpe las molestias ocasionadas y vuelva a intentarlo más tarde. Muchas Gracias.',
         confirmButtonText: 'OK',
         confirmButtonColor: processEnv.mainColor,
-        imageUrl: RobotAvatar,
-        imageWidth: 100,
-        imageHeight: 100,
-        imageAlt: 'Custom image',
         customClass: {
           popup: 'animated animate__fadeInDown',
         },
@@ -98,8 +91,8 @@ export const UploadFiles: FC<webchatProps> = function ({
   return (
     <div {...getRootProps()}>
       {!isDragActive ? (
-        <div className="drop-here-container">
-          <div className="drop-here">
+        <div className="drop-here-container__ewc-class">
+          <div className="drop-here__ewc-class">
             <div>Arrastra tus archivos y suéltalos AQUÍ!</div>
             <img
               src={FileUpload}
@@ -109,8 +102,8 @@ export const UploadFiles: FC<webchatProps> = function ({
             />
           </div>
           {files.length > 0 && (
-            <div className="files-uploaded-container">
-              <div className="files-uploaded-header">
+            <div className="files-uploaded-container__ewc-class">
+              <div className="files-uploaded-header__ewc-class">
                 <span>
                   {files.length > 0 ? files.length : 0} archivo
                   {files.length > 1 && 's'} con un peso total de{' '}
@@ -118,23 +111,23 @@ export const UploadFiles: FC<webchatProps> = function ({
                   MB
                 </span>
               </div>
-              <div className="file-uploaded-wrapper">
+              <div className="file-uploaded-wrapper__ewc-class">
                 {files.map((file) => (
-                  <div key={file.id} className="file-uploaded">
+                  <div key={file.id} className="file-uploaded__ewc-class">
                     {file.file.type === 'application/pdf' ? (
                       <img
-                        className="file-icon-uploaded"
+                        className="file-icon-uploaded__ewc-class"
                         src={PdfIcon}
                         alt="file"
                       />
                     ) : (
                       <img
-                        className="file-icon-uploaded"
+                        className="file-icon-uploaded__ewc-class"
                         src={ImageIcon}
                         alt="file"
                       />
                     )}
-                    <div className="file-uploaded-name">
+                    <div className="file-uploaded-name__ewc-class">
                       {file.file.name.length > 20
                         ? `${file.file.name.substring(
                             0,
@@ -145,13 +138,13 @@ export const UploadFiles: FC<webchatProps> = function ({
                             .toLocaleUpperCase()}${']'}`
                         : file.file.name}
                     </div>
-                    <div className="file-uploaded-size">
+                    <div className="file-uploaded-size__ewc-class">
                       {(file.file.size / 1024 / 1024).toFixed(2)} MB
                     </div>
-                    <div className="file-uploaded-delete">
+                    <div className="file-uploaded-delete__ewc-class">
                       <button
                         type="button"
-                        className="file-uploaded-delete-button"
+                        className="file-uploaded-delete-button__ewc-class"
                         onClick={() => onDelete(file.file)}>
                         x
                       </button>
@@ -163,22 +156,36 @@ export const UploadFiles: FC<webchatProps> = function ({
           )}
         </div>
       ) : (
-        <div className="drop-zone-container drop-zone">
-          <div className="drop-zone-icon-container">
-            <img className="drop-zone-image" src={FileUpload} alt="file" />
+        <div className="drop-zone-container__ewc-class drop-zone__ewc-class">
+          <div className="drop-zone-icon-container__ewc-class">
+            <img
+              className="drop-zone-image__ewc-class"
+              src={FileUpload}
+              alt="file"
+            />
           </div>
-          <div className="drop-zone" />
+          <div className="drop-zone__ewc-class" />
         </div>
       )}
-      <button onClick={open} type="button" className="click-to-upload-button">
+      <button
+        onClick={open}
+        type="button"
+        className="click-to-upload-button__ewc-class">
         <input type="button" {...getInputProps()} />
         <div>
           <span>Click aquí para adjuntar un archivo</span>
-          <img className="upload-icon" src={UploadClick} alt="file" />
+          <img
+            className="upload-icon__ewc-class"
+            src={UploadClick}
+            alt="file"
+          />
         </div>
       </button>
-      {uploading ? (
-        <button type="button" className="send-button-upload" disabled>
+      {uploading && sessionStorage.getItem('chatId') ? (
+        <button
+          type="button"
+          className="send-button-upload__ewc-class"
+          disabled>
           <SpinnerDotted
             size={30}
             thickness={120}
@@ -191,12 +198,12 @@ export const UploadFiles: FC<webchatProps> = function ({
           type="button"
           className={
             files.length > 0
-              ? 'send-button-upload prepared-to-send'
-              : 'send-button-upload'
+              ? 'send-button-upload__ewc-class prepared-to-send__ewc-class'
+              : 'send-button-upload__ewc-class'
           }
           onClick={handleAdjuntarClick}>
           <img
-            className="send-image-upload"
+            className="send-image-upload__ewc-class"
             src={SendButton}
             alt="send-uploaded-files"
           />

@@ -36,7 +36,7 @@ module.exports = (data) => {
             {
               loader: 'sass-loader',
               options: {
-                additionalData: `$mainColor: ${data.mainColor};`,
+                additionalData: `$mainColor: ${data.mainColor}; $secondaryColor: ${data.secondaryColor};`,
               },
             },
           ],
@@ -59,11 +59,14 @@ module.exports = (data) => {
       new Webpack.DefinePlugin({
         processEnv: {
           mainColor: JSON.stringify(data.mainColor),
+          secondaryColor: JSON.stringify(data.secondaryColor),
           name: JSON.stringify(data.name),
           description: JSON.stringify(data.description),
           avatar: JSON.stringify(data.avatar),
           socketUrl: JSON.stringify(data.socketUrl),
           restUrl: JSON.stringify(data.restUrl),
+          animation: JSON.stringify(data.animation),
+          companyId: JSON.stringify(data.companyId),
         },
       }),
     ],
