@@ -5,10 +5,18 @@ const Webpack = require('webpack');
 const path = require('path');
 
 module.exports = (data) => {
+  const webchatPath = path.resolve(
+    __dirname,
+    '../',
+    'ailalia_backend',
+    'uploads',
+    'webchats',
+    `${data.companyId}`,
+  );
   return {
     entry: './src/index.tsx',
     output: {
-      path: path.resolve(__dirname, 'dist'),
+      path: webchatPath,
       filename: 'bundle.js',
     },
     resolve: {
