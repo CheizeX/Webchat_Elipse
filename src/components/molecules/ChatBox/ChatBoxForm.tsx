@@ -7,7 +7,7 @@ export const ChatBoxForm: FC<webchatProps> = function ({
   outOfHour,
   email,
   setSetingNameAndEmail,
-  validateBusinessTime,
+  // validateBusinessTime,
   setOutOfHourWarning,
   setName,
   setEmail,
@@ -42,7 +42,7 @@ export const ChatBoxForm: FC<webchatProps> = function ({
   }, [email, name, validationSchema, setSetingNameAndEmail]);
 
   const handleSendButton = () => {
-    validateBusinessTime();
+    // validateBusinessTime();
     if (outOfHour) {
       setOutOfHourWarning(true);
       return;

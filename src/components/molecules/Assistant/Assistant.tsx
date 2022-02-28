@@ -1,20 +1,23 @@
 import React, { FC } from 'react';
-import RobotAvatar from '../../../assets/robot.svg';
-import UserSVG from '../../../assets/user.svg';
-import CollapseButton from '../../../assets/chevron-square-down.svg';
 import { webchatProps } from '../../WebChat/Webchat';
 import { AnimationSvg } from '../AnimationSvg/Animation';
 
 export const Assistant: FC<webchatProps> = function ({
   handleCollapse,
   agentName,
+  base64Avatar,
+  svgBack,
 }) {
   return (
     <div className="assistant__ewc-class">
       <AnimationSvg />
       <img
+        src={
+          agentName === ''
+            ? `data:image/svg+xml;base64,${base64Avatar}`
+            : svgBack.UserSVG
+        }
         className="avatar__ewc-class"
-        src={agentName === '' ? RobotAvatar : UserSVG}
         alt="avatar"
       />
       <div className="titles-container__ewc-class">
@@ -39,7 +42,7 @@ export const Assistant: FC<webchatProps> = function ({
           onClick={handleCollapse}>
           <img
             className="down-image__ewc-class"
-            src={CollapseButton}
+            src={agentName === '' ? svgBack.CollapseButton : svgBack.UserSVG}
             alt="send"
           />
         </button>

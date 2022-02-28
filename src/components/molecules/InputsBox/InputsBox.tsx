@@ -3,7 +3,6 @@ import axios, { AxiosRequestConfig } from 'axios';
 import React, { FC, KeyboardEvent, useCallback } from 'react';
 import Swal from 'sweetalert2';
 import { SpinnerDotted } from 'spinners-react';
-import SendButton from '../../../assets/send_121135.svg';
 import { webchatProps } from '../../WebChat/Webchat';
 import { UploadFiles } from '../UploadFiles/UploadFiles';
 import { Message } from '../../shared';
@@ -20,11 +19,12 @@ export const InputsBox: FC<webchatProps> = function ({
   setSendingMessage,
   setMessages,
   setBusyAgents,
-  validateBusinessTime,
+  // validateBusinessTime,
   socket,
+  svgBack,
 }) {
   const handleSendMessage = useCallback(async () => {
-    validateBusinessTime();
+    // validateBusinessTime();
     if (outOfHour) {
       return;
     }
@@ -111,7 +111,7 @@ export const InputsBox: FC<webchatProps> = function ({
   }, [
     chatInputDialogue,
     socket,
-    validateBusinessTime,
+    // validateBusinessTime,
     outOfHour,
     setMessages,
     setChatInputDialogue,
@@ -153,12 +153,17 @@ export const InputsBox: FC<webchatProps> = function ({
             ? 'upload-button__ewc-class upload-active__ewc-class'
             : 'upload-button__ewc-class'
         }>
-        <img className="file-icon__ewc-class" src={SendButton} alt="file" />
+        <img
+          className="file-icon__ewc-class"
+          src={svgBack.SendButton}
+          alt="file"
+        />
       </button>
       {uploadActive && (
         <UploadFiles
           fromId={messages[0]?.from}
           setUploadActive={setUploadActive}
+          svgBack={svgBack}
         />
       )}
       <input
@@ -190,7 +195,11 @@ export const InputsBox: FC<webchatProps> = function ({
           type="button"
           className="send-button__ewc-class"
           onClick={handleClcikToSendMessage}>
-          <img className="send-image__ewc-class" src={SendButton} alt="send" />
+          <img
+            className="send-image__ewc-class"
+            src={svgBack.SendButton}
+            alt="send"
+          />
         </button>
       )}
     </div>

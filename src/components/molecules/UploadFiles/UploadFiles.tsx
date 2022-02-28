@@ -4,11 +4,6 @@ import React, { FC, useCallback, useState } from 'react';
 import { FileError, useDropzone } from 'react-dropzone';
 import Swal from 'sweetalert2';
 import { SpinnerDotted } from 'spinners-react';
-import SendButton from '../../../assets/send_121135.svg';
-import FileUpload from '../../../assets/drop-here.svg';
-import ImageIcon from '../../../assets/image-icon.svg';
-import PdfIcon from '../../../assets/pdf-icon.svg';
-import UploadClick from '../../../assets/upload-image.svg';
 import { webchatProps } from '../../WebChat/Webchat';
 
 export interface UploadableFile {
@@ -21,6 +16,7 @@ export interface UploadableFile {
 export const UploadFiles: FC<webchatProps> = function ({
   fromId,
   setUploadActive,
+  svgBack,
 }) {
   const [files, setFiles] = useState<UploadableFile[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -95,7 +91,7 @@ export const UploadFiles: FC<webchatProps> = function ({
           <div className="drop-here__ewc-class">
             <div>Arrastra tus archivos y suéltalos AQUÍ!</div>
             <img
-              src={FileUpload}
+              src={svgBack.FileUpload}
               alt="Arrastre aquí sus archivos..."
               width="70px"
               height="70px"
@@ -117,13 +113,13 @@ export const UploadFiles: FC<webchatProps> = function ({
                     {file.file.type === 'application/pdf' ? (
                       <img
                         className="file-icon-uploaded__ewc-class"
-                        src={PdfIcon}
+                        src={svgBack.PdfIcon}
                         alt="file"
                       />
                     ) : (
                       <img
                         className="file-icon-uploaded__ewc-class"
-                        src={ImageIcon}
+                        src={svgBack.ImageIcon}
                         alt="file"
                       />
                     )}
@@ -160,7 +156,7 @@ export const UploadFiles: FC<webchatProps> = function ({
           <div className="drop-zone-icon-container__ewc-class">
             <img
               className="drop-zone-image__ewc-class"
-              src={FileUpload}
+              src={svgBack.FileUpload}
               alt="file"
             />
           </div>
@@ -176,7 +172,7 @@ export const UploadFiles: FC<webchatProps> = function ({
           <span>Click aquí para adjuntar un archivo</span>
           <img
             className="upload-icon__ewc-class"
-            src={UploadClick}
+            src={svgBack.UploadClick}
             alt="file"
           />
         </div>
@@ -204,7 +200,7 @@ export const UploadFiles: FC<webchatProps> = function ({
           onClick={handleAdjuntarClick}>
           <img
             className="send-image-upload__ewc-class"
-            src={SendButton}
+            src={svgBack.SendButton}
             alt="send-uploaded-files"
           />
         </button>

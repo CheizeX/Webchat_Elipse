@@ -32,6 +32,8 @@ export interface webchatProps {
   validationErrors?: string;
   isCollapsed?: boolean;
   agentName?: string;
+  base64Avatar?: string;
+  svgBack?: any;
   setUploadActive?: Dispatch<SetStateAction<boolean>>;
   setOutOfHourWarning?: Dispatch<SetStateAction<boolean>>;
   setSendingMessage?: Dispatch<SetStateAction<boolean>>;
@@ -63,39 +65,33 @@ export const WebChat: FC = function () {
   const [agentName, setAgentName] = useState('');
   const [conversationFinished, setConversationFinished] = useState(false);
   const [busyAgents, setBusyAgents] = useState(false);
+  const [svgI, setSvgI] = useState('');
+  const [svgBack, setSvgBack] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  // <<< Validación de Horario de Atención >>>
-  const validateBusinessTime = useCallback(() => {
-    const currentDate = new Date();
-    const currentDayOfWeek = currentDate.getDay();
-    const currentTime = currentDate.getTime();
-    // <<< HORARIO DE INICIO DE ATENCIÓN >>>
-    const startTime = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      currentDate.getDate(),
-      8,
-      30,
-    ).getTime();
-    // <<< HORARIO DE FIN DE ATENCIÓN >>>
-    const endTime = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      currentDate.getDate(),
-      currentDayOfWeek === 5 ? 16 : 18,
-      0,
-    ).getTime();
+  const getAvatar = useCallback(async () => {
+    const { data }: any = await axios.get(processEnv.avatar);
+    setSvgI(data);
+  }, []);
 
-    // if (
-    //   currentDayOfWeek === 0 ||
-    //   currentDayOfWeek === 6 ||
-    //   currentTime < startTime ||
-    //   currentTime > endTime
-    // ) {
-    //   setOutOfHour(true);
-    //   setOutOfHourWarning(true);
-    // }
-  }, [setOutOfHour]);
+  const getAllImages = useCallback(async () => {
+    setLoading(true);
+    try {
+      const axiosConfig: AxiosRequestConfig = {
+        url: `${processEnv.restUrl}/webchat/webchatFiles/icons`,
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      const { data }: any = await axios(axiosConfig);
+      setSvgBack(data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   const getMessages = useCallback(
     async (idChat) => {
       try {
@@ -136,7 +132,6 @@ export const WebChat: FC = function () {
   );
 
   const handleCollapse = (): void => {
-    validateBusinessTime();
     setIsCollapsed(!isCollapsed);
   };
 
@@ -151,6 +146,11 @@ export const WebChat: FC = function () {
     const socketConnection = io(processEnv.socketUrl);
     setSocket(socketConnection);
   }, [setSocket]);
+
+  useEffect(() => {
+    getAvatar();
+    getAllImages();
+  }, []);
 
   useEffect(() => {
     socket?.on('connect', () => {
@@ -182,74 +182,96 @@ export const WebChat: FC = function () {
 
   return (
     <>
-      <div className={isCollapsed ? 'chat-container__ewc-class' : 'hidden'}>
-        {outOfHourWarning && (
-          <OutOfHourWarningComponent
-            setOutOfHourWarning={setOutOfHourWarning}
-          />
-        )}
-        {conversationFinished && (
-          <FinishedConversation
-            setConversationFinished={setConversationFinished}
-            handleCollapse={handleCollapse}
-          />
-        )}
-        {busyAgents && <BusyAgents setBusyAgents={setBusyAgents} />}
-
-        <Assistant handleCollapse={handleCollapse} agentName={agentName} />
-
-        {sessionStorage.getItem('webchat_elipse_name') &&
-          sessionStorage.getItem('webchat_elipse_email') && (
-            <>
-              <ChatBox messages={messages} agentName={agentName} />
-              <InputsBox
-                messages={messages}
-                outOfHour={outOfHour}
-                uploadActive={uploadActive}
-                sendingMessage={sendingMessage}
-                chatInputDialogue={chatInputDialogue}
-                setOutOfHourWarning={setOutOfHourWarning}
-                setUploadActive={setUploadActive}
-                setSendingMessage={setSendingMessage}
-                setChatInputDialogue={setChatInputDialogue}
-                setMessages={setMessages}
-                setBusyAgents={setBusyAgents}
-                validateBusinessTime={validateBusinessTime}
-                socket={socket}
-              />
-            </>
+      {!loading && (
+        <div className={isCollapsed ? 'chat-container__ewc-class' : 'hidden'}>
+          {outOfHourWarning && (
+            <OutOfHourWarningComponent
+              setOutOfHourWarning={setOutOfHourWarning}
+              svgBack={svgBack}
+            />
+          )}
+          {conversationFinished && (
+            <FinishedConversation
+              setConversationFinished={setConversationFinished}
+              handleCollapse={handleCollapse}
+              svgBack={svgBack}
+            />
+          )}
+          {busyAgents && (
+            <BusyAgents setBusyAgents={setBusyAgents} svgBack={svgBack} />
           )}
 
-        {(!sessionStorage.getItem('webchat_elipse_name') ||
-          !sessionStorage.getItem('webchat_elipse_email')) && (
-          <ChatBoxForm
-            email={email}
-            setEmail={setEmail}
-            name={name}
-            setName={setName}
-            setSetingNameAndEmail={setSetingNameAndEmail}
-            setMessages={setMessages}
-            validateBusinessTime={validateBusinessTime}
-            outOfHour={outOfHour}
-            setOutOfHourWarning={setOutOfHourWarning}
+          <Assistant
+            handleCollapse={handleCollapse}
+            agentName={agentName}
+            base64Avatar={svgI}
+            svgBack={svgBack}
           />
-        )}
 
-        <div className="footer__ewc-class">
-          <a
-            href="https://elipse.ai/elipse-chat/#preciosyplanes"
-            target="_blank"
-            className="footer-button"
-            rel="noreferrer">
-            Powered by Elipse
-          </a>
+          {sessionStorage.getItem('webchat_elipse_name') &&
+            sessionStorage.getItem('webchat_elipse_email') && (
+              <>
+                <ChatBox
+                  messages={messages}
+                  agentName={agentName}
+                  base64Avatar={svgI}
+                  svgBack={svgBack}
+                />
+                <InputsBox
+                  messages={messages}
+                  outOfHour={outOfHour}
+                  uploadActive={uploadActive}
+                  sendingMessage={sendingMessage}
+                  chatInputDialogue={chatInputDialogue}
+                  setOutOfHourWarning={setOutOfHourWarning}
+                  setUploadActive={setUploadActive}
+                  setSendingMessage={setSendingMessage}
+                  setChatInputDialogue={setChatInputDialogue}
+                  setMessages={setMessages}
+                  setBusyAgents={setBusyAgents}
+                  // validateBusinessTime={validateBusinessTime}
+                  socket={socket}
+                  svgBack={svgBack}
+                />
+              </>
+            )}
+
+          {(!sessionStorage.getItem('webchat_elipse_name') ||
+            !sessionStorage.getItem('webchat_elipse_email')) && (
+            <ChatBoxForm
+              email={email}
+              setEmail={setEmail}
+              name={name}
+              setName={setName}
+              setSetingNameAndEmail={setSetingNameAndEmail}
+              setMessages={setMessages}
+              // validateBusinessTime={validateBusinessTime}
+              outOfHour={outOfHour}
+              setOutOfHourWarning={setOutOfHourWarning}
+              svgBack={svgBack}
+            />
+          )}
+
+          <div className="footer__ewc-class">
+            <a
+              href="https://elipse.ai/elipse-chat/#preciosyplanes"
+              target="_blank"
+              className="footer-button"
+              rel="noreferrer">
+              Powered by Elipse
+            </a>
+          </div>
         </div>
-      </div>
-      <TriggerButton
-        handleCollapse={handleCollapse}
-        isCollapsed={isCollapsed}
-        agentName={agentName}
-      />
+      )}
+      {!loading && (
+        <TriggerButton
+          base64Avatar={svgI}
+          handleCollapse={handleCollapse}
+          isCollapsed={isCollapsed}
+          agentName={agentName}
+          svgBack={svgBack}
+        />
+      )}
     </>
   );
 };

@@ -4,8 +4,8 @@
   "main": "index.tsx",
   "license": "MIT",
   "scripts": {
-    "start": "webpack serve --port 3000 --mode development --open --hot --env mainColor=#8520d0 --env animation=yes --env secondaryColor=#6be0d1 --env name='Elipse Chat' --env description='Asistente Virtual' --env avatar=../../assets/user.svg --env socketUrl=https://ws-ailalia.ngrok.io --env restUrl=https://rest-ailalia.ngrok.io/rest/v1/api --env companyId=61f713aee1822f4d387ae7f6",
-    "build": "webpack --mode production --env mainColor=#8520d0 --env animation=yes --env secondaryColor=#6be0d1 --env name='Elipse Chat' --env description='Asistente Virtual' --env avatar=assets/user.svg --env socketUrl=https://api.elipsechat.com --env restUrl=https://api.elipsechat.com/rest/v1/api --env companyId=61fd89f81dd5549a3fd446e1"
+    "start": "webpack serve --port 3000 --mode development --open --hot --env companyName=621c29f592b4cdbe86167a04 --env mainColor=#8520d0 --env animation=yes --env secondaryColor=#6be0d1 --env name='Elipse Chat' --env description='Asistente Virtual' --env avatar=https://rest-ailalia.ngrok.io/rest/v1/api/webchat/avatar?avatar=Mascota_2 --env socketUrl=https://ws-ailalia.ngrok.io --env restUrl=https://rest-ailalia.ngrok.io/rest/v1/api",
+    "build": "webpack --mode production --env companyName=621c29f592b4cdbe86167a04 --env mainColor=#8520d0 --env animation=yes --env secondaryColor=#6be0d1 --env name='Elipse Chat' --env description='Asistente Virtual' --env avatar=https://apitest.elipsechat.com/rest/v1/api/webchat/avatar?avatar=Mascota_2 --env socketUrl=https://apitest.elipsechat.com --env restUrl=https://apitest.elipsechat.com/rest/v1/api"
   },
   "dependencies": {
     "axios": "^0.24.0",
@@ -41,7 +41,6 @@
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.4.5",
     "prettier": "^2.5.0",
-    "sass": "^1.43.4",
     "sass-loader": "^12.3.0",
     "source-map-loader": "^3.0.0",
     "style-loader": "^3.3.1",

@@ -5,11 +5,14 @@ import Swal from 'sweetalert2';
 import { SpinnerCircularFixed } from 'spinners-react';
 import { FaFileDownload, FaWindowClose } from 'react-icons/fa';
 import { CgMaximizeAlt } from 'react-icons/cg';
-import RobotAvatar from '../../../assets/robot.svg';
-import UserSVG from '../../../assets/user.svg';
 import { webchatProps } from '../../WebChat/Webchat';
 
-export const ChatBox: FC<webchatProps> = function ({ messages, agentName }) {
+export const ChatBox: FC<webchatProps> = function ({
+  messages,
+  agentName,
+  base64Avatar,
+  svgBack,
+}) {
   const dialogueBoxRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
   const [maximizedFile, setMaximizedFile] = useState('');
@@ -57,7 +60,11 @@ export const ChatBox: FC<webchatProps> = function ({ messages, agentName }) {
             <div className="bot-image-container__ewc-class">
               <img
                 className="bot-image__ewc-class"
-                src={agentName === '' ? RobotAvatar : UserSVG}
+                src={
+                  agentName === ''
+                    ? `data:image/svg+xml;base64,${base64Avatar}`
+                    : svgBack.UserSVG
+                }
                 alt=""
               />
             </div>
@@ -87,7 +94,11 @@ export const ChatBox: FC<webchatProps> = function ({ messages, agentName }) {
                   <div className="bot-image-container__ewc-class">
                     <img
                       className="bot-image__ewc-class"
-                      src={agentName === '' ? RobotAvatar : UserSVG}
+                      src={
+                        agentName === ''
+                          ? `data:image/svg+xml;base64,${base64Avatar}`
+                          : svgBack.UserSVG
+                      }
                       alt=""
                     />
                   </div>
