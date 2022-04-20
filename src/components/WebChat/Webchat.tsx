@@ -269,8 +269,7 @@ export const WebChat: FC<webchatProps> = function () {
     });
 
     socket?.on('agentData', (data: { name: string; id: string }) => {
-      sessionStorage.setItem('webchat_elipse_name', data.name);
-      sessionStorage.setItem('webchat_elipse_email', data.name);
+      sessionStorage.setItem('webchat_elipse_agent_name', data.name);
       setAgentName(data.name);
     });
 
