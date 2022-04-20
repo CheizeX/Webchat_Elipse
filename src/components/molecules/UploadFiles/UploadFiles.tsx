@@ -60,6 +60,8 @@ export const UploadFiles: FC<webchatProps> = function ({
           data: formData,
           headers: {
             'Content-Type': 'multipart/form-data',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': 'true',
           },
         };
         await axios(axiosConfig);
