@@ -1,14 +1,11 @@
-import React, {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import io, { Socket } from 'socket.io-client';
+/* eslint-disable no-nested-ternary */
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import io from 'socket.io-client';
 import axios, { AxiosRequestConfig } from 'axios';
 import Swal from 'sweetalert2';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { VscListSelection } from 'react-icons/vsc';
+import { MdOutlineSupportAgent } from 'react-icons/md';
 import { Message } from '../shared';
 import { OutOfHourWarningComponent } from '../molecules/InformationMessages/OutOfHourWarning/OutOfHourWarning';
 import { Assistant } from '../molecules/Assistant/Assistant';
@@ -18,39 +15,12 @@ import { ChatBoxForm } from '../molecules/ChatBox/ChatBoxForm';
 import { TriggerButton } from '../molecules/TriggerButton/TriggerButton';
 import { FinishedConversation } from '../molecules/InformationMessages/FinishedConversation/FinishedConversation';
 import { BusyAgents } from '../molecules/InformationMessages/BusyAgents/BusyAgents';
+import { BotBox } from '../molecules/BotBox/BotBox';
+import { initialMessage } from '../extra';
+import { webchatProps } from './webchat.interface';
+import { Confirmation } from '../molecules/InformationMessages/Confirmation/Confirmation';
 
-export interface webchatProps {
-  fromId?: string;
-  messages?: Message[];
-  outOfHour?: boolean;
-  uploadActive?: boolean;
-  sendingMessage?: boolean;
-  chatInputDialogue?: string;
-  name?: string;
-  email?: string;
-  socket?: Socket;
-  validationErrors?: string;
-  isCollapsed?: boolean;
-  agentName?: string;
-  base64Avatar?: string;
-  svgBack?: any;
-  setUploadActive?: Dispatch<SetStateAction<boolean>>;
-  setOutOfHourWarning?: Dispatch<SetStateAction<boolean>>;
-  setSendingMessage?: Dispatch<SetStateAction<boolean>>;
-  setChatInputDialogue?: Dispatch<SetStateAction<string>>;
-  setMessages?: Dispatch<SetStateAction<Message[]>>;
-  setSetingNameAndEmail?: Dispatch<SetStateAction<boolean>>;
-  setConversationFinished?: Dispatch<SetStateAction<boolean>>;
-  setBusyAgents?: Dispatch<SetStateAction<boolean>>;
-  setIsCollapsed?: Dispatch<SetStateAction<boolean>>;
-  setName?: Dispatch<SetStateAction<string>>;
-  setEmail?: Dispatch<SetStateAction<string>>;
-  setRUT?: Dispatch<SetStateAction<string>>;
-  handleCollapse?: () => void;
-  validateBusinessTime?: () => void;
-}
-
-export const WebChat: FC = function () {
+export const WebChat: FC<webchatProps> = function () {
   const [socket, setSocket] = useState(null);
   const [setingNameAndEmail, setSetingNameAndEmail] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -60,17 +30,31 @@ export const WebChat: FC = function () {
   const [sendingMessage, setSendingMessage] = useState(false);
   const [messages, setMessages] = useState([] as Message[]);
   const [uploadActive, setUploadActive] = useState(false);
-  const [outOfHour, setOutOfHour] = useState(false);
   const [outOfHourWarning, setOutOfHourWarning] = useState(false);
-  const [agentName, setAgentName] = useState('');
+  const [agentName, setAgentName] = useState(
+    sessionStorage.getItem('webchat_elipse_agent_name') || '',
+  );
   const [conversationFinished, setConversationFinished] = useState(false);
   const [busyAgents, setBusyAgents] = useState(false);
+  const [confirmation, setConfirmation] = useState(false);
   const [svgI, setSvgI] = useState('');
   const [svgBack, setSvgBack] = useState({});
   const [loading, setLoading] = useState(false);
+  const [toggleBotWithAgent, setToggleBotWithAgent] = useState(true);
+  const [automatedMessages, setAutomatedMessages] = useState<Message[]>(
+    !sessionStorage.getItem('chatId') && initialMessage,
+  );
+  const [formFieldsAndAutomatedMessages, setFormFieldsAndAutomatedMessages] =
+    useState<Message[]>([]);
+
+  console.log(
+    '[FORM FIELDS AND AUTOMATED MESSAGES]',
+    formFieldsAndAutomatedMessages,
+  );
+  console.log('[AUTOMATED MESSAGES]', automatedMessages);
 
   const getAvatar = useCallback(async () => {
-    const { data }: any = await axios.get(processEnv.avatar);
+    const { data } = await axios.get(processEnv.avatar);
     setSvgI(data);
   }, []);
 
@@ -84,7 +68,7 @@ export const WebChat: FC = function () {
           'Content-Type': 'application/json',
         },
       };
-      const { data }: any = await axios(axiosConfig);
+      const { data } = await axios(axiosConfig);
       setSvgBack(data);
       setLoading(false);
     } catch (error) {
@@ -135,6 +119,120 @@ export const WebChat: FC = function () {
     setIsCollapsed(!isCollapsed);
   };
 
+  const handleSendMessage = useCallback(
+    async (botInteractedMessages?: Message[]) => {
+      if (socket.connected) {
+        setChatInputDialogue('');
+        // Objeto para el valor del input
+        const bodyObject: Message = {
+          content: chatInputDialogue,
+          infoUser: `${sessionStorage?.getItem(
+            'webchat_elipse_name',
+          )} - ${sessionStorage?.getItem('webchat_elipse_email')}`,
+        };
+        // Objeto para el contenido de la interacción con el bot
+        const bodyObjectArray = {
+          content: botInteractedMessages || '',
+          infoUser: `${sessionStorage?.getItem(
+            'webchat_elipse_name',
+          )} - ${sessionStorage?.getItem('webchat_elipse_email')}`,
+        };
+
+        try {
+          setSendingMessage(true);
+          const axiosConfig: AxiosRequestConfig = {
+            url: `${processEnv.restUrl}/webchat/sendMessageToAgent`,
+            method: 'post',
+            data: sessionStorage.getItem('chatId')
+              ? bodyObject
+              : bodyObjectArray,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            params: {
+              chatId: sessionStorage.getItem('chatId'),
+              companyId: processEnv.companyId,
+            },
+          };
+
+          const response = await axios(axiosConfig);
+          if (response.data.success) {
+            if (response?.data?.result?._id) {
+              sessionStorage.setItem('chatId', response.data.result._id);
+              socket.emit(
+                'joinWebchatUser',
+                response.data.result.client.clientId,
+              );
+              setMessages(response.data.result.messages);
+            } else {
+              setMessages(response.data.result);
+            }
+          } else if (response?.data.errorMessage) {
+            const errorMess = response.data.errorMessage;
+
+            if (errorMess === 'Agents not available') {
+              setMessages(response.data.chat.result.messages);
+              setBusyAgents(true);
+            }
+
+            if (errorMess === 'Out of time') {
+              setOutOfHourWarning(true);
+            }
+          } else {
+            Swal.fire({
+              title:
+                'Estamos experimentando inconvenientes técnicos. Por favor, disculpe las molestias ocasionadas y vuelva a intentarlo más tarde. Muchas Gracias.',
+              confirmButtonText: 'OK',
+              confirmButtonColor: processEnv.mainColor,
+              customClass: {
+                popup: 'animated animate__fadeInDown',
+              },
+            });
+          }
+          setSendingMessage(false);
+        } catch (error) {
+          console.log('entra', error);
+          Swal.fire({
+            title:
+              'Estamos experimentando inconvenientes técnicos. Por favor, disculpe las molestias ocasionadas y vuelva a intentarlo más tarde. Muchas Gracias.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: processEnv.mainColor,
+            customClass: {
+              popup: 'animated animate__fadeInDown',
+            },
+          });
+          setSendingMessage(false);
+        }
+      } else {
+        Swal.fire({
+          title:
+            'Estamos experimentando inconvenientes técnicos. Por favor, disculpe las molestias ocasionadas y vuelva a intentarlo más tarde. Muchas Gracias.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: processEnv.mainColor,
+          customClass: {
+            popup: 'animated animate__fadeInDown',
+          },
+        });
+      }
+    },
+    [
+      chatInputDialogue,
+      socket,
+      setMessages,
+      setChatInputDialogue,
+      setSendingMessage,
+      setBusyAgents,
+    ],
+  );
+
+  const handleBackToBot = () => {
+    setToggleBotWithAgent(false);
+    setFormFieldsAndAutomatedMessages([]);
+  };
+  const handleBackToForward = () => {
+    setToggleBotWithAgent(true);
+  };
+
   useEffect(() => {
     if (sessionStorage.getItem('chatId')) {
       const idChat = sessionStorage.getItem('chatId');
@@ -164,11 +262,13 @@ export const WebChat: FC = function () {
     socket?.on('finishConversationForWebchat', () => {
       setMessages([]);
       sessionStorage.removeItem('chatId');
+      sessionStorage.removeItem('webchat_elipse_agent_name');
       setConversationFinished(true);
       setAgentName('');
     });
 
     socket?.on('agentData', (data: { name: string; id: string }) => {
+      sessionStorage.setItem('webchat_elipse_agent_name', data.name);
       setAgentName(data.name);
     });
 
@@ -198,7 +298,22 @@ export const WebChat: FC = function () {
             />
           )}
           {busyAgents && (
-            <BusyAgents setBusyAgents={setBusyAgents} svgBack={svgBack} />
+            <BusyAgents
+              setBusyAgents={setBusyAgents}
+              svgBack={svgBack}
+              handleSendMessage={handleSendMessage}
+              formFieldsAndAutomatedMessages={formFieldsAndAutomatedMessages}
+              automatedMessages={automatedMessages}
+            />
+          )}
+          {confirmation && sessionStorage.getItem('chatId') && (
+            <Confirmation
+              setConfirmation={setConfirmation}
+              svgBack={svgBack}
+              handleSendMessage={handleSendMessage}
+              formFieldsAndAutomatedMessages={formFieldsAndAutomatedMessages}
+              automatedMessages={automatedMessages}
+            />
           )}
 
           <Assistant
@@ -207,9 +322,41 @@ export const WebChat: FC = function () {
             base64Avatar={svgI}
             svgBack={svgBack}
           />
+          {/* {toggleBotWithAgent && (
+            <div className="without-header-back-container__ewc-class">
+              <button
+                type="button"
+                className="back-button__ewc-class"
+                onClick={handleBackToBot}>
+                <IoIosArrowBack />
 
+                <div>
+                  {' '}
+                  <VscListSelection />{' '}
+                </div>
+                <span />
+              </button>
+            </div>
+          )} */}
+          {!toggleBotWithAgent && sessionStorage.getItem('chatId') && (
+            <div className="without-header-back-container__ewc-class">
+              <button
+                type="button"
+                className="back-button__ewc-class"
+                onClick={handleBackToForward}>
+                <IoIosArrowForward />
+
+                <div>
+                  {' '}
+                  <MdOutlineSupportAgent />{' '}
+                </div>
+                <span />
+              </button>
+            </div>
+          )}
           {sessionStorage.getItem('webchat_elipse_name') &&
-            sessionStorage.getItem('webchat_elipse_email') && (
+            sessionStorage.getItem('webchat_elipse_email') &&
+            toggleBotWithAgent && (
               <>
                 <ChatBox
                   messages={messages}
@@ -219,38 +366,56 @@ export const WebChat: FC = function () {
                 />
                 <InputsBox
                   messages={messages}
-                  outOfHour={outOfHour}
                   uploadActive={uploadActive}
                   sendingMessage={sendingMessage}
                   chatInputDialogue={chatInputDialogue}
+                  outOfHourWarning={outOfHourWarning}
                   setOutOfHourWarning={setOutOfHourWarning}
                   setUploadActive={setUploadActive}
                   setSendingMessage={setSendingMessage}
                   setChatInputDialogue={setChatInputDialogue}
                   setMessages={setMessages}
                   setBusyAgents={setBusyAgents}
-                  // validateBusinessTime={validateBusinessTime}
                   socket={socket}
                   svgBack={svgBack}
+                  handleSendMessage={handleSendMessage}
                 />
               </>
             )}
 
-          {(!sessionStorage.getItem('webchat_elipse_name') ||
-            !sessionStorage.getItem('webchat_elipse_email')) && (
-            <ChatBoxForm
-              email={email}
-              setEmail={setEmail}
-              name={name}
-              setName={setName}
-              setSetingNameAndEmail={setSetingNameAndEmail}
-              setMessages={setMessages}
-              // validateBusinessTime={validateBusinessTime}
-              outOfHour={outOfHour}
-              setOutOfHourWarning={setOutOfHourWarning}
-              svgBack={svgBack}
+          {!toggleBotWithAgent && (
+            <BotBox
+              handleSendMessage={handleSendMessage}
+              setToggleBotWithAgent={setToggleBotWithAgent}
+              automatedMessages={automatedMessages}
+              setAutomatedMessages={setAutomatedMessages}
+              base64Avatar={svgI}
+              setFormFieldsAndAutomatedMessages={
+                setFormFieldsAndAutomatedMessages
+              }
+              setConfirmation={setConfirmation}
             />
           )}
+
+          {(!sessionStorage.getItem('webchat_elipse_name') ||
+            !sessionStorage.getItem('webchat_elipse_email')) &&
+            toggleBotWithAgent && (
+              <ChatBoxForm
+                email={email}
+                setEmail={setEmail}
+                name={name}
+                setName={setName}
+                setSetingNameAndEmail={setSetingNameAndEmail}
+                setMessages={setMessages}
+                automatedMessages={automatedMessages}
+                handleSendMessage={handleSendMessage}
+                setOutOfHourWarning={setOutOfHourWarning}
+                svgBack={svgBack}
+                formFieldsAndAutomatedMessages={formFieldsAndAutomatedMessages}
+                // setToggleBotWithAgent={setToggleBotWithAgent}
+                // toggleBotWithAgent={toggleBotWithAgent}
+              />
+            )}
 
           <div className="footer__ewc-class">
             <a

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { FC } from 'react';
+import React, { Dispatch, FC, SetStateAction } from 'react';
 import Warning from '../../../../assets/warning.svg';
 import { Message } from '../../../shared';
 import { webchatProps } from '../../../WebChat/webchat.interface';
@@ -8,31 +8,32 @@ interface BotBoxProps {
   automatedMessages: Message[];
   formFieldsAndAutomatedMessages: Message[];
   handleSendMessage: (arg?: Message[]) => void;
+  setConfirmation: Dispatch<SetStateAction<boolean>>;
 }
-export const BusyAgents: FC<webchatProps & BotBoxProps> = function ({
-  setBusyAgents,
+export const Confirmation: FC<webchatProps & BotBoxProps> = function ({
+  setConfirmation,
   automatedMessages,
   formFieldsAndAutomatedMessages,
   handleSendMessage,
 }) {
   const handleClick = () => {
-    handleSendMessage(formFieldsAndAutomatedMessages);
-    setBusyAgents(false);
+    console.log('[CONFIR]', formFieldsAndAutomatedMessages);
+    // handleSendMessage(formFieldsAndAutomatedMessages);
+    setConfirmation(false);
   };
 
   return (
-    <div className="busy-agents__ewc-class">
+    <div className="confirmation__ewc-class">
       <div>
         <img src={Warning} alt="busy agents" />
       </div>
-      <h1>AGENTES OCUPADOS</h1>
+      <h1>CONFIRMAR</h1>
       <span>
-        Todos nuestros agentes se encuentran ocupados en este momento. Por favor
-        aguarde un instante.
+        Ya tienes una conversación iniciada anteriormente con un agente
       </span>
-      <span>Muchas gracias.</span>
+      <span>Estás seguro de que deseas enviar estos datos?</span>
       <button
-        className="button-close-busy-agents__ewc-class"
+        className="button-close-confirmation__ewc-class"
         type="button"
         onClick={handleClick}>
         OK

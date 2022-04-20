@@ -5,13 +5,14 @@ import Swal from 'sweetalert2';
 import { SpinnerCircularFixed } from 'spinners-react';
 import { FaFileDownload, FaWindowClose } from 'react-icons/fa';
 import { CgMaximizeAlt } from 'react-icons/cg';
-import { webchatProps } from '../../WebChat/Webchat';
+import { MdOutlineSupportAgent } from 'react-icons/md';
+import { webchatProps } from '../../WebChat/webchat.interface';
+import { MessageFrom } from '../../shared';
 
 export const ChatBox: FC<webchatProps> = function ({
   messages,
   agentName,
   base64Avatar,
-  svgBack,
 }) {
   const dialogueBoxRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
@@ -55,52 +56,22 @@ export const ChatBox: FC<webchatProps> = function ({
   return (
     <div className="chat-box__ewc-class">
       <div className="dialogues-box__ewc-class">
-        <div>
-          <div className="bot-dialogue__ewc-class">
-            <div className="bot-image-container__ewc-class">
-              <img
-                className="bot-image__ewc-class"
-                src={
-                  agentName === ''
-                    ? `data:image/svg+xml;base64,${base64Avatar}`
-                    : svgBack.UserSVG
-                }
-                alt=""
-              />
-            </div>
-            <div className="bot-text-container__ewc-class">
-              <p className="bot-text__ewc-class">
-                Hola {sessionStorage.getItem('webchat_elipse_name')}. Estamos
-                para leer tus preguntas y resolver tus dudas. Realiza tu
-                consulta y cuando un agente se encuentre disponible te
-                responderá a la brevedad. Muchas gracias.
-              </p>
-            </div>
-          </div>
-          <div className="bot-time__ewc-class">
-            {' '}
-            {new Date().toLocaleTimeString('en-US', {
-              hour: 'numeric',
-              minute: 'numeric',
-              hour12: true,
-            })}
-          </div>
-        </div>
         {messages &&
           messages?.map((message) =>
-            message.from === 'AGENT' ? (
+            message.from === MessageFrom.AGENT ||
+            message.from === MessageFrom.BOT ? (
               <div key={message._id}>
                 <div className="bot-dialogue__ewc-class">
                   <div className="bot-image-container__ewc-class">
-                    <img
-                      className="bot-image__ewc-class"
-                      src={
-                        agentName === ''
-                          ? `data:image/svg+xml;base64,${base64Avatar}`
-                          : svgBack.UserSVG
-                      }
-                      alt=""
-                    />
+                    {message.from !== MessageFrom.BOT ? (
+                      <MdOutlineSupportAgent className="agent-image__ewc-class" />
+                    ) : (
+                      <img
+                        className="bot-image__ewc-class"
+                        src={`data:image/svg+xml;base64,${base64Avatar}`}
+                        alt=""
+                      />
+                    )}
                   </div>
                   <div
                     className={
@@ -108,7 +79,12 @@ export const ChatBox: FC<webchatProps> = function ({
                         ? 'bot-text-container__ewc-class clickable-bot__ewc-class'
                         : 'bot-text-container__ewc-class'
                     }>
-                    <span className="bot-text__ewc-class">
+                    <span
+                      className={
+                        message.from === MessageFrom.BOT
+                          ? 'bot-text__ewc-class'
+                          : 'agent-text__ewc-class'
+                      }>
                       {message.contentType === 'ATTACHMENT' &&
                         message.content.substring(
                           message.content.length - 3,
