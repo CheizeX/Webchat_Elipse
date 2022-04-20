@@ -25,10 +25,23 @@
           width: 1.5625rem;
           height: 1.5625rem;
           border-radius: 1.6875rem;
-          background-image: linear-gradient(140deg, $main 0%, $secondary 150%);
+          background-color: $main;
+          background-image: linear-gradient(140deg, $secondary 0%, $main 150%);
           margin-right: 0.3125rem;
-          box-shadow: 0 0.0625rem 0.125rem 0.0625rem $main;
+          box-shadow: 0 0.0625rem 0.125rem 0.0625rem rgba($secondary, 0.5);
           border: 0.0625rem solid $gray-9;
+        }
+        .agent-image__ewc-class {
+          box-shadow: 0 0.0625rem 0.125rem 0.0625rem rgba($main, 0.5);
+          width: 1.5625rem;
+          height: 1.5625rem;
+          border-radius: 1.6875rem;
+          background-color: $secondary;
+          margin-right: 0.3125rem;
+          background-image: linear-gradient(140deg, $main 0%, $secondary 150%);
+          border: 0.0625rem solid $gray-9;
+          color: $gray-10;
+          padding: 2px;
         }
       }
       .bot-text-container__ewc-class {
@@ -47,8 +60,25 @@
           padding: 0.625rem;
           border-radius: 0.3125rem;
           border-top-left-radius: 0rem;
+          background-color: $secondary;
+          max-width: 14.375rem;
+          & > img {
+            width: 100%;
+            border-radius: 0.3125rem;
+          }
+        }
+        .agent-text__ewc-class {
+          position: relative;
+          flex-direction: column;
+          display: flex;
+          align-items: center;
+          min-height: 1.875rem;
+          text-align: left;
+          padding: 0.625rem;
+          border-radius: 0.3125rem;
+          border-top-left-radius: 0rem;
           background-color: $main;
-          background-image: linear-gradient(160deg, $main 0%, $secondary 130%);
+          // background-image: linear-gradient(160deg, $main 0%, $secondary 130%);
           max-width: 14.375rem;
           & > img {
             width: 100%;
@@ -210,20 +240,35 @@
       color: $gray-9;
       font-weight: 700;
       font-size: 0.875rem;
-      border-radius: 0.3125rem;
       cursor: pointer;
       margin-top: 0rem;
       background-image: linear-gradient(165deg, $main 0%, $secondary 70%);
       background-size: 200% 100%;
+      display: inline-block;
+      border: none;
+      border-radius: 0.3125rem;
+      transition: all 0.2s ease-in-out;
       &:hover {
-        transition: all 0.5 ease-in-out;
-        background-position: 70% 0;
-        -o-transition: all 0.5s ease-in-out;
-        -webkit-transition: all 0.5s ease-in-out;
-        background-color: $main;
+        animation: gradient 3s infinite;
+        transform: scale(1.01);
       }
       &:active {
-        background-color: $main;
+        animation: gradient 3s infinite;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
       }
     }
   }

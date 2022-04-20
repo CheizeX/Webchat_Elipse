@@ -16,7 +16,7 @@ module.exports = (data) => {
   return {
     entry: './src/index.tsx',
     output: {
-      path: path.resolve(__dirname, 'dist'),
+      path: webchatPath,
       filename: 'bundle.js',
     },
     resolve: {

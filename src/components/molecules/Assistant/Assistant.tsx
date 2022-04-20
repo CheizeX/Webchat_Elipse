@@ -1,25 +1,26 @@
 import React, { FC } from 'react';
-import { webchatProps } from '../../WebChat/Webchat';
+import { AiFillCaretDown } from 'react-icons/ai';
+import { MdOutlineSupportAgent } from 'react-icons/md';
+import { webchatProps } from '../../WebChat/webchat.interface';
 import { AnimationSvg } from '../AnimationSvg/Animation';
 
 export const Assistant: FC<webchatProps> = function ({
   handleCollapse,
   agentName,
   base64Avatar,
-  svgBack,
 }) {
   return (
     <div className="assistant__ewc-class">
       <AnimationSvg />
-      <img
-        src={
-          agentName === ''
-            ? `data:image/svg+xml;base64,${base64Avatar}`
-            : svgBack.UserSVG
-        }
-        className="avatar__ewc-class"
-        alt="avatar"
-      />
+      {agentName === '' ? (
+        <img
+          src={`data:image/svg+xml;base64,${base64Avatar}`}
+          className="avatar__ewc-class"
+          alt="avatar"
+        />
+      ) : (
+        <MdOutlineSupportAgent className="assistant-image__ewc-class" />
+      )}
       <div className="titles-container__ewc-class">
         {agentName === '' ? (
           <>
@@ -40,11 +41,7 @@ export const Assistant: FC<webchatProps> = function ({
           type="button"
           className="colapse-button__ewc-class"
           onClick={handleCollapse}>
-          <img
-            className="down-image__ewc-class"
-            src={agentName === '' ? svgBack.CollapseButton : svgBack.UserSVG}
-            alt="send"
-          />
+          <AiFillCaretDown color="white" size="20px" />
         </button>
       </div>
     </div>

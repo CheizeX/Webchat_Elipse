@@ -4,7 +4,7 @@ import React, { FC, useCallback, useState } from 'react';
 import { FileError, useDropzone } from 'react-dropzone';
 import Swal from 'sweetalert2';
 import { SpinnerDotted } from 'spinners-react';
-import { webchatProps } from '../../WebChat/Webchat';
+import { webchatProps } from '../../WebChat/webchat.interface';
 
 export interface UploadableFile {
   name?: string | undefined;

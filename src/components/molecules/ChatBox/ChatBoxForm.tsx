@@ -1,16 +1,23 @@
 import React, { FC, useCallback, useState } from 'react';
 import * as yup from 'yup';
-import { webchatProps } from '../../WebChat/Webchat';
+import { Message } from '../../shared';
+import { webchatProps } from '../../WebChat/webchat.interface';
 
-export const ChatBoxForm: FC<webchatProps> = function ({
+interface BotBoxProps {
+  automatedMessages: Message[];
+  formFieldsAndAutomatedMessages: Message[];
+  handleSendMessage: (arg?: Message[]) => void;
+}
+
+export const ChatBoxForm: FC<webchatProps & BotBoxProps> = function ({
+  automatedMessages,
   name,
-  outOfHour,
   email,
+  handleSendMessage,
   setSetingNameAndEmail,
-  // validateBusinessTime,
-  setOutOfHourWarning,
   setName,
   setEmail,
+  formFieldsAndAutomatedMessages,
 }) {
   const [validationErrors, setValidationErrors] = useState('');
 
@@ -41,13 +48,15 @@ export const ChatBoxForm: FC<webchatProps> = function ({
     }
   }, [email, name, validationSchema, setSetingNameAndEmail]);
 
-  const handleSendButton = () => {
+  const handleSendButton = async () => {
     // validateBusinessTime();
-    if (outOfHour) {
-      setOutOfHourWarning(true);
-      return;
+    await handleSetNameAndEmailOnStorage();
+    if (!sessionStorage.getItem('chatId')) {
+      handleSendMessage(
+        // formFieldsAndAutomatedMessages ||
+        automatedMessages,
+      );
     }
-    handleSetNameAndEmailOnStorage();
   };
 
   const handleLocaleStorageName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,12 +98,13 @@ export const ChatBoxForm: FC<webchatProps> = function ({
           onChange={handleLocaleStorageEmail}
         />
         <p className="error-message__ewc-class">{validationErrors}</p>
-        <input
+        <button
           type="button"
           className="but-control__ewc-class"
-          value="ENVIAR"
-          onClick={handleSendButton}
-        />
+          // value="ENVIAR"
+          onClick={handleSendButton}>
+          ENVIAR
+        </button>
       </form>
     </div>
   );

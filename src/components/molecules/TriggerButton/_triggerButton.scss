@@ -11,6 +11,7 @@
   width: 3.125rem;
   position: absolute;
   bottom: 0.7rem;
+  background: linear-gradient(140deg, $main 0%, $secondary 150%);
   right: 1.25rem;
   border: 0.125rem solid $gray-10;
   box-shadow: 0rem 0.125rem 0.3125rem 0.125rem rgba(0, 0, 0, 0.185);
@@ -27,4 +28,9 @@
     background: linear-gradient(140deg, $main 0%, $secondary 150%);
   }
   overflow: hidden;
+}
+.assistant-trigger__ewc-class {
+  color: $gray-9;
+  width: 2rem;
+  height: 2rem;
 }
