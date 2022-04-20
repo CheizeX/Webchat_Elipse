@@ -262,13 +262,15 @@ export const WebChat: FC<webchatProps> = function () {
     socket?.on('finishConversationForWebchat', () => {
       setMessages([]);
       sessionStorage.removeItem('chatId');
-      sessionStorage.removeItem('webchat_elipse_agent_name');
+      sessionStorage.removeItem('webchat_elipse_name');
+      sessionStorage.removeItem('webchat_elipse_email');
       setConversationFinished(true);
       setAgentName('');
     });
 
     socket?.on('agentData', (data: { name: string; id: string }) => {
-      sessionStorage.setItem('webchat_elipse_agent_name', data.name);
+      sessionStorage.setItem('webchat_elipse_name', data.name);
+      sessionStorage.setItem('webchat_elipse_email', data.name);
       setAgentName(data.name);
     });
 
