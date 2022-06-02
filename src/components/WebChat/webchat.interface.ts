@@ -18,6 +18,8 @@ export interface webchatProps {
   svgBack?: any;
   automatedMessages?: Message[];
   outOfHourWarning?: boolean;
+  outOfHourMessage?: string;
+  setOutOfHourMessage?: Dispatch<SetStateAction<string>>;
   setUploadActive?: Dispatch<SetStateAction<boolean>>;
   setOutOfHourWarning?: Dispatch<SetStateAction<boolean>>;
   setSendingMessage?: Dispatch<SetStateAction<boolean>>;

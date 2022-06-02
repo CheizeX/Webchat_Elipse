@@ -31,6 +31,7 @@ export const WebChat: FC<webchatProps> = function () {
   const [messages, setMessages] = useState([] as Message[]);
   const [uploadActive, setUploadActive] = useState(false);
   const [outOfHourWarning, setOutOfHourWarning] = useState(false);
+  const [outOfHourMessage, setOutOfHourMessage] = useState('');
   const [agentName, setAgentName] = useState(
     sessionStorage.getItem('webchat_elipse_agent_name') || '',
   );
@@ -169,13 +170,20 @@ export const WebChat: FC<webchatProps> = function () {
             }
           } else if (response?.data.errorMessage) {
             const errorMess = response.data.errorMessage;
+            const ailaliaError = response.data.ailaliaErrorCode;
 
             if (errorMess === 'Agents not available') {
               setMessages(response.data.chat.result.messages);
               setBusyAgents(true);
             }
 
-            if (errorMess === 'Out of time') {
+            if (ailaliaError === 'Out of time') {
+              setOutOfHourMessage(
+                errorMess === 'Not setted'
+                  ? 'En este momento no podemos atenderte, por favor comunícate dentro de nuestro horario de atención, muchas gracias.'
+                  : errorMess,
+              );
+              sessionStorage.setItem('outOfHour', 'true');
               setOutOfHourWarning(true);
             }
           } else {
@@ -287,6 +295,8 @@ export const WebChat: FC<webchatProps> = function () {
         <div className={isCollapsed ? 'chat-container__ewc-class' : 'hidden'}>
           {outOfHourWarning && (
             <OutOfHourWarningComponent
+              setOutOfHourMessage={setOutOfHourMessage}
+              outOfHourMessage={outOfHourMessage}
               setOutOfHourWarning={setOutOfHourWarning}
               svgBack={svgBack}
             />
